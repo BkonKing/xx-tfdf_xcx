@@ -1,0 +1,63 @@
+page {
+  --tag-primary-color: #448fe4;
+  --tag-warning-color: #ffc017;
+  --tag-danger-color: #eb5841;
+  button {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+  .tf-uni-list {
+    background-color: #fff;
+    border-radius: 8rpx;
+    ::v-deep .uni-list {
+      background-color: #fff;
+      border-radius: 8rpx;
+    }
+    ::v-deep .uni-list--border {
+      left: 30rpx;
+      right: 30rpx;
+    }
+    ::v-deep .uni-list-item {
+      background-color: initial;
+    }
+  }
+  ::v-deep .uni-list-item__extra-text {
+    font-size: 28rpx;
+    color: #000;
+  }
+  ::v-deep .uni-card {
+    margin: 30rpx 20rpx 0 !important;
+    padding: 0 30rpx !important;
+    .uni-card__header,
+    .uni-card__content {
+      padding: 20rpx 0 !important;
+    }
+  }
+  ::v-deep .is-add .icon-add{
+    width: 80rpx;
+    height: 6rpx;
+  }
+  ::v-deep .uni-navbar {
+    .uni-navbar__header-container {
+      padding: 0;
+    }
+    .uni-navbar__header-container-inner {
+      padding: 0;
+      justify-content: flex-start;
+    }
+    .uni-nav-bar-text {
+      font-size: 32rpx;
+    }
+  }
+  .uni-popup {
+    z-index: 9999;
+  }
+  .uni-calendar-item__weeks-box .uni-calendar-item--checked {
+    background-color: #EF4141;
+  }
+  .uni-datetime-picker--btn {
+    background-color: #EF4141;
+  }
+  .sign-center {
+    left: 208rpx;
+  }
+}

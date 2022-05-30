@@ -1,0 +1,209 @@
+  page {
+    width: 100%;
+    min-height: 100%;
+    background-color: #fff;
+    font-size: 28rpx;
+  }
+  button, input, view, text, scroll-view {
+    box-sizing: border-box;
+    font-size: 28rpx;
+  }
+  image {
+    width: auto;
+    height: auto;
+  }
+  button {
+    -webkit-tap-highlight-color: initial;
+  }
+  button::after {
+    border: none;
+  }
+  navigator {
+    display: inline-block;
+  }
+	.tf-bg-white {
+	  background-color: #fff;
+	}
+  .tf-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  // flex布局
+  .tf-flex {
+    display: flex;
+  }
+  .tf-flex-row {
+    display: flex;
+    flex-direction: row;
+  }
+  .tf-flex-col {
+    display: flex;
+    flex-direction: column;
+  }
+  .tf-flex-1 {
+    flex: 1;
+  }
+  .tf-row-justify-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .tf-row-justify-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .tf-row-justify-end {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  .tf-row-justify-around {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .tf-row-items-center {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .tf-column-justify-around {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  .tf-column-justify-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .tf-column-items-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .tf-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  // 内间距
+  .tf-p-10 {
+    padding: 10rpx;
+  }
+  
+  .tf-p-20 {
+    padding: 20rpx;
+  }
+  
+  .tf-p-30 {
+    padding: 30rpx;
+  }
+  
+  .tf-p-30-20 {
+    padding: 30rpx 20rpx;
+  }
+  
+  // 外间距
+  .tf-mt-10 {
+    margin-top: 10rpx;
+  }
+  .tf-mt-20 {
+    margin-top: 20rpx;
+  }
+  .tf-mt-30 {
+    margin-top: 30rpx;
+  }
+  .tf-mr-10 {
+    margin-right: 10rpx;
+  }
+  .tf-mr-20 {
+    margin-right: 20rpx;
+  }
+  .tf-mr-30 {
+    margin-right: 30rpx;
+  }
+  .tf-mb-10 {
+    margin-bottom: 10rpx;
+  }
+  .tf-mb-20 {
+    margin-bottom: 20rpx;
+  }
+  .tf-mb-30 {
+    margin-bottom: 30rpx;
+  }
+  .tf-ml-10 {
+    margin-left: 10rpx;
+  }
+  .tf-ml-20 {
+    margin-left: 20rpx;
+  }
+  .tf-ml-30 {
+    margin-left: 30rpx;
+  }
+  
+  // 宽度
+  .tf-w-full {
+    width: 100%;
+  }
+  .tf-h-full {
+    height: 100%;
+  }
+  .tf-w-h-full {
+    width: 100%;
+    height: 100%;
+  }
+  
+  // 字体
+  .tf-text-lg {
+    font-size: 30rpx;
+  }
+  .tf-text-sm {
+    font-size: 24rpx;
+  }
+  .tf-text {
+    font-size: 28rpx;
+  }
+  .tf-text-strong {
+    font-weight: bold;
+  }
+  .tf-text-align-center {
+    text-align: center;
+  }
+  .tf-text-align-right {
+    text-align: right;
+  }
+  .tf-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  // 文本颜色
+  .tf-text-color {
+    color: #222;
+  }
+  .tf-text-gray-7 {
+    color: #8F8F94;
+  }
+  .tf-text-primary {
+    color: $uni-color-primary !important;
+  }
+  .tf-text-link {
+    color: #019aff;
+  }
+  
+  // 按钮
+  .tf-btn-primary {
+    background-color: $uni-color-primary;
+    color: #fff;
+  }
+  
+  // 边框圆角
+  .tf-rounded-10 {
+    border-radius: 10rpx;
+  }

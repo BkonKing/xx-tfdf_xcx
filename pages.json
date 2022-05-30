@@ -1,0 +1,115 @@
+{
+  "pages": [ //pages数组中第一项表示应用启动页
+    {
+      "path": "pages/tabBar/home/home",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+
+    }, {
+      "path": "pages/tabBar/personage/personage",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    }, {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    }, {
+      "path": "pages/personal/personal",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    }, {
+      "path": "pages/agreement/agreement",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    }
+      ,{
+            "path" : "pages/appointment/appointment",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/detail/detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#f2f2f4",
+    "navigationStyle": "custom",
+    "usingComponents": {
+      "van-tab": "/wxcomponents/vant/tab/index",
+      "van-tabs": "/wxcomponents/vant/tabs/index"
+    }
+  },
+  "tabBar": {
+    "color": "#8F8F94",
+    "selectedColor": "#eb5841",
+    "borderStyle": "black",
+    "backgroundColor": "#fff",
+    "list": [{
+      "pagePath": "pages/tabBar/home/home",
+      "iconPath": "static/home.png",
+      "selectedIconPath": "static/home-active.png",
+      "text": "首页"
+    }, {
+      "pagePath": "pages/tabBar/personage/personage",
+      "iconPath": "static/personage.png",
+      "selectedIconPath": "static/personage-active.png",
+      "text": "我的"
+    }]
+  },
+  "condition": { //模式配置，仅开发期间生效
+    "current": 0, //当前激活的模式(list 的索引项)
+    "list": [{
+        "name": "登录",
+        "path": "pages/login/login",
+        "query": ""
+      },
+      {
+        "name": "我的",
+        "path": "pages/tabBar/personage/personage",
+        "query": ""
+      },
+      {
+        "name": "个人信息",
+        "path": "pages/personal/personal",
+        "query": ""
+      },
+      {
+        "name": "协议",
+        "path": "pages/agreement/agreement",
+        "query": ""
+      },
+      {
+        "name": "预约选房",
+        "path": "pages/appointment/appointment",
+        "query": ""
+      },
+      {
+        "name": "详情",
+        "path": "pages/detail/detail",
+        "query": ""
+      }
+    ]
+  }
+}
