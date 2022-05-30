@@ -56,8 +56,9 @@ const store = {
     currentProject(state) {
       return state.current_project
     },
-    userType(state) {
-      return state.userInfo.user_type || 0
+    userMobile(state) {
+      const mobile = state.userInfo && state.userInfo.mobile
+      return mobile ? `${mobile.substr(0,3)}****${mobile.substr(7)}` : ''
     }
   },
   actions: {

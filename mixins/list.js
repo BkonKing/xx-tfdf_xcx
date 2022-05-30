@@ -15,11 +15,11 @@ export default {
       }
     }
   },
-  onLoad() {
-    setTimeout(() => {
-      this.handleLoad(true);
-    }, 0)
-  },
+  // onLoad() {
+  //   setTimeout(() => {
+  //     this.handleLoad(true);
+  //   }, 0)
+  // },
   onReachBottom() {
     !this.isFinish && this.getNextPage()
   },

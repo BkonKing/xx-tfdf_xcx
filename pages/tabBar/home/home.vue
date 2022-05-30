@@ -22,7 +22,7 @@
             src="@/static/avatar.png"
             mode="aspectFill"
           ></image>
-          <view class="text">{{ userInfo.realname || '登录/注册'}}</view>
+          <view class="text">{{ userInfo.id ? userMobile : '登录/注册'}}</view>
         </view>
       </view>
       <view class="container">
@@ -79,7 +79,7 @@ export default {
     MobileLoginPopup
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo', 'userMobile'])
   },
   data() {
     return {
@@ -90,8 +90,17 @@ export default {
   },
   onLoad() {
     this.getShareInfo();
-    if (!this.userInfo.id) {
-      this.loginVisible = true
+    // if (!this.userInfo.id) {
+    //   this.loginVisible = true
+    // }
+  },
+  onShow() {
+    if (uni.getStorageSync('access_token')) {
+      this.$store.dispatch('getMyAccount').then(() => {
+        this.refreshLoad();
+      });
+    } else {
+      this.refreshLoad();
     }
   },
   onShareAppMessage() {

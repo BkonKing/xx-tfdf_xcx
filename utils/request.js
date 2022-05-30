@@ -47,27 +47,22 @@ service.interceptors.response.use(
       msg: message
     } = data
     config.loading && uni.hideLoading();
-    console.log(response);
     if (status == 401 || code == 401) {
       if (store.state.loginModal) {
         return Promise.reject(code)
       }
-      store.commit('setLoginModal', true)
       uni.showModal({
         title: '提示',
         content: '登录信息已经过期了，请重新登录',
         success: function(res) {
+          clearUserInfo()
           if (res.confirm) {
-            clearUserInfo()
-            uni.reLaunch({
-              url: '/pages/index/login'
+            uni.navigateTo({
+              url: '/pages/login/login'
             })
           } else if (res.cancel) {
             console.log('用户点击取消');
           }
-        },
-        complete() {
-          store.commit('setLoginModal', false)
         }
       });
       return Promise.reject(code)
@@ -85,7 +80,23 @@ service.interceptors.response.use(
     }
   },
   error => {
-    if (error.errMsg && error.errMsg.includes('timeout')) {
+    if (error.statusCode == 401) {
+      uni.showModal({
+        title: '提示',
+        content: '登录信息已经过期了，请重新登录',
+        success: function(res) {
+          clearUserInfo()
+          if (res.confirm) {
+            uni.navigateTo({
+              url: '/pages/login/login'
+            })
+          } else if (res.cancel) {
+            console.log('用户点击取消');
+          }
+        }
+      });
+      return Promise.reject(code)
+    } else if (error.errMsg && error.errMsg.includes('timeout')) {
       uni.showToast({
         title: '请求超时',
         icon: 'none',

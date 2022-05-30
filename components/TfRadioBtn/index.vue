@@ -77,11 +77,9 @@ export default {
   height: 88rpx;
   padding: 0 20rpx;
   background-color: #F7F7F7;
+  margin-right: 20rpx;
   margin-bottom: 20rpx;
   border-radius: 6rpx;
-  + .radio-btn__item  {
-    margin-left: 20rpx;
-  }
 }
 .radio-btn__text {
   font-size: 28rpx;

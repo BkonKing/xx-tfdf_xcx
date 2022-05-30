@@ -20,7 +20,7 @@
           mode="aspectFill"
         ></image>
         <view class="tf-row-items-center" style="position: relative;">
-          <view class="user-nickname">{{ userInfo.realname }}</view>
+          <view class="user-nickname">{{ userMobile }}</view>
           <image class="border-image" src="@/static/border.png"></image>
         </view>
       </view>
@@ -47,10 +47,11 @@
             </button>
           </view>
           <view class="text-4 tf-mt-30">
-            {{ item.project }} {{ item.house }}
+            {{ item.project }} {{ item.house ? `(${item.house})` : '' }}
           </view>
           <view class="text-4 tf-mt-10">
-            {{ item.realname }}，{{ item.mobile }}，{{ item.explain }}
+            {{ item.realname ? `${item.realname}，` : '' }}{{ item.mobile
+            }}{{ item.explain ? `，${item.explain}` : '' }}
           </view>
         </view>
       </view>
@@ -69,10 +70,17 @@ import ListMixins from '@/mixins/list.js';
 export default {
   mixins: [ListMixins],
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo', 'userMobile'])
   },
   data() {
     return {};
+  },
+  onShow() {
+    if (uni.getStorageSync('access_token')) {
+      this.$store.dispatch('getMyAccount').then(() => {
+        this.refreshLoad();
+      });
+    }
   },
   methods: {
     getListData() {

@@ -23,15 +23,17 @@
           :range="projectOptions"
           @change="bindPickerChange"
         >
-          <view class="select tf-mt-20 tf-mb-60">
+          <view class="select tf-mt-20 tf-mb-20">
             <text>
               {{ projectOptions[projectIndex].projectName || '请选择' }}
             </text>
             <uni-icons type="bottom"></uni-icons>
           </view>
         </picker>
-        <view class="title">意向户型</view>
-        <view class="tf-mt-20">
+        <view v-if="houseOptions && houseOptions.length" class="title tf-mt-40">
+          意向户型
+        </view>
+        <view v-if="houseOptions && houseOptions.length" class="tf-mt-20">
           <tf-radio-btn
             v-model="houseIds"
             label-key="houseName"
@@ -56,18 +58,22 @@
         <view class="tf-mt-20 tf-mb-60">
           <input v-model="mobile" class="input" maxlength="11" type="number" />
         </view>
-        <view class="title">预约时间</view>
+        <view class="title">
+          预约时间
+          <text class="tf-text-primary">*</text>
+        </view>
         <view class="tf-mt-20 tf-mb-60">
           <uni-datetime-picker
             v-model="yyTime"
             type="datetime"
             :start="minDate"
             :hide-second="true"
+            @change="handleDateChange"
           />
         </view>
         <view class="title">其他说明</view>
-        <view class="tf-mt-20">
-          <input v-model="explain" class="input" maxlength="11" type="number" />
+        <view class="tf-mt-20 tf-mb-20">
+          <input v-model="explain" class="input" maxlength="100" />
         </view>
       </view>
       <view class="fixed-placeholder">
@@ -105,8 +111,8 @@ export default {
       projectIndex: ''
     };
   },
-  onLoad({projectId}) {
-    this.projectId = projectId || ''
+  onLoad({ projectId }) {
+    this.projectId = projectId || '';
     this.getAllProject();
     if (this.userInfo.realname) {
       this.realName = this.userInfo.realname;
@@ -120,9 +126,9 @@ export default {
       const { records } = await getAllProject();
       this.projectOptions = records || [];
       if (records?.length && this.projectId) {
-        const index = records.findIndex(obj => obj.id === +this.projectId)
-        this.projectIndex = index
-        this.getAllHouse()
+        const index = records.findIndex(obj => obj.id === +this.projectId);
+        this.projectIndex = index;
+        this.getAllHouse();
       }
     },
     bindPickerChange({ detail }) {
@@ -131,6 +137,15 @@ export default {
       this.houseIds = [];
       this.getAllHouse();
     },
+    handleDateChange(value) {
+      const time = new Date(value.replace(/-/g, '/')).getTime();
+      console.log(time);
+      if (time < this.minDate) {
+        this.$nextTick(() => {
+          this.yyTime = '';
+        });
+      }
+    },
     async getAllHouse() {
       const { records } = await getAllHouse({
         projectId: this.projectOptions[this.projectIndex].id
@@ -138,7 +153,7 @@ export default {
       this.houseOptions = records || [];
     },
     submit() {
-      if (!this.projectIndex || this.projectIndex < 0) {
+      if (this.projectIndex === '' || this.projectIndex < 0) {
         uni.showToast({
           title: '请选择意向户型',
           icon: 'none',
@@ -162,6 +177,14 @@ export default {
         });
         return;
       }
+      if (!this.yyTime) {
+        uni.showToast({
+          title: '请选择预约时间',
+          icon: 'none',
+          duration: 2000
+        });
+        return;
+      }
       this.addIntention();
     },
     async addIntention() {
@@ -180,7 +203,7 @@ export default {
           icon: 'none',
           duration: 2000
         });
-        this.$router.go(-1)
+        this.$router.go(-1);
       }
     }
   }
@@ -225,6 +248,9 @@ export default {
 }
 .tf-mb-60 {
   margin-bottom: 60rpx;
+}
+.tf-mt-40 {
+  margin-top: 40rpx;
 }
 .fixed-placeholder {
   height: calc(158rpx + env(safe-area-inset-bottom));

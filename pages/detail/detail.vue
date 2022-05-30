@@ -45,14 +45,21 @@
               parseFloat(info.roomMaxArea)
             }}m²
           </view>
-          <view class="text-2 tf-mt-10">参考均价</view>
+          <view class="text-2 tf-mt-10">
+            {{ houseText ? `${houseText}室` : '房间面积' }}
+          </view>
         </view>
       </view>
       <view class="tf-mt-20">
-        {{ info.province }} {{ info.city }} {{ info.area }} {{ info.address }}
+        <map
+          class="map"
+          :latitude="newLocation.latitude"
+          :longitude="newLocation.longitude"
+          @tap="openMap"
+        ></map>
       </view>
     </view>
-    <view class="card tf-mt-20">
+    <view v-if="houses && houses.length" class="card tf-mt-20">
       <view class="title">户型介绍</view>
       <van-tabs :active="activeIndex" :ellipsis="false" @change="onTabChange">
         <van-tab
@@ -64,14 +71,20 @@
       </van-tabs>
       <scroll-view class="house-scroll-view" scroll-x="true">
         <view class="tf-flex-row">
-          <view v-for="(house, i) in activeHouseData" :key="i" class="house-box">
-            <image class="house-image" :src="house.images"></image>
+          <view
+            v-for="(house, i) in activeHouseData"
+            :key="i"
+            class="house-box"
+          >
+            <image class="house-image" :src="house.images" @click="previewHouseImage(i)"></image>
             <view class="house-text-1">{{ house.houseName }}</view>
             <view class="tf-mt-10">
-              <text class="tf-text-sm">{{ parseFloat(house.houseArea) }}m²</text>
+              <text class="tf-text-sm">
+                {{ parseFloat(house.houseArea) }}m²
+              </text>
               <text class="tf-text-sm tf-ml-30">
                 <text class="tf-text-primary tf-text-sm">
-                  {{ parseFloat(house.averagePrice) }}
+                  {{ parseFloat(house.averagePrice) }}万
                 </text>
                 起
               </text>
@@ -90,14 +103,18 @@
       <view class="fixed-box">
         <view class="tf-column-items-center" @click="callPhone">
           <uni-icons type="headphones" size="18"></uni-icons>
-          <view>咨询</view>
+          <view class="tf-text-20">咨询</view>
         </view>
-        <button v-if="!info.yyTime" class="fixed-btn tf-btn-primary" @click="goAppointment">
+        <button
+          v-if="!info.yyTime"
+          class="fixed-btn tf-btn-primary"
+          @click="goAppointment"
+        >
           预约选房
         </button>
         <view v-else>
           <text class="tf-text-primary tf-text-sm">已预约</text>
-          <text class="text-3">（{{info.yyTime}}）</text>
+          <text class="text-3">（{{ info.yyTime }}）</text>
         </view>
       </view>
     </view>
@@ -106,18 +123,31 @@
 
 <script>
 import { getProjectInfo } from '@/api/user.js';
+import { convert2TecentMap, openLocation } from '@/utils/util';
+
 export default {
   computed: {
     images() {
       return this.info.images.map(obj => obj.url);
     },
     activeHouseData() {
-      const index = this.activeIndex
+      const index = this.activeIndex;
       if (this.houses && this.houses.length) {
-        console.log(this.houses[index].data);
-        return this.houses[index].data
+        return this.houses[index].data;
       }
-      return []
+      return [];
+    },
+    address() {
+      const { province = '', city = '', area = '', address = '' } = this.info;
+      return `${province}${city}${area}${address}`;
+    },
+    newLocation() {
+      const { latitude, longitude } = this.info
+      const newLocation = convert2TecentMap({
+        latitude: latitude,
+        longitude: longitude
+      })
+      return newLocation
     }
   },
   data() {
@@ -127,46 +157,9 @@ export default {
         images: []
       },
       current: 0,
-      tabs: [
-        {
-          label: '一室(1)',
-          value: 1
-        },
-        {
-          label: '一室(1)',
-          value: 2
-        },
-        {
-          label: '一室(1)',
-          value: 2
-        },
-        {
-          label: '一室(1)',
-          value: 2
-        },
-        {
-          label: '一室(1)',
-          value: 2
-        },
-        {
-          label: '一室(1)',
-          value: 2
-        },
-        {
-          label: '一室(1)',
-          value: 2
-        },
-        {
-          label: '一室(1)',
-          value: 2
-        },
-        {
-          label: '一室(1)',
-          value: 2
-        }
-      ],
       activeIndex: 0,
-      houses: []
+      houses: [],
+      houseText: ''
     };
   },
   onLoad({ id }) {
@@ -182,9 +175,12 @@ export default {
       });
       this.info = records || {};
       if (records.house) {
+        const houseText = [];
         const tableData = Object.keys(records.house).map(key => {
+          houseText.push(key);
           return records.house[key];
         });
+        this.houseText = houseText.join('/');
         this.houses = tableData;
       }
     },
@@ -200,12 +196,32 @@ export default {
         query: {
           projectId: this.id
         }
-      })
+      });
     },
     previewImage(index) {
       uni.previewImage({
         urls: this.images,
         current: index
+      });
+    },
+    previewHouseImage(index) {
+      const images = this.activeHouseData.map((house) => {
+        return house.images
+      })
+      uni.previewImage({
+        urls: images,
+        current: index
+      });
+    },
+    previewContentImage() {
+      
+    },
+    openMap() {
+      openLocation({
+        name: this.info.projectName,
+        address: this.address,
+        longitude: this.info.longitude,
+        latitude: this.info.latitude
       });
     },
     callPhone() {
@@ -218,14 +234,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tf-text-20 {
+  font-size: 20rpx;
+}
 .tf-mt-100 {
   margin-top: -100rpx;
 }
 .left-btn {
   position: fixed;
-  top: 60rpx;
+  top: 24rpx;
   left: 34rpx;
-  z-index: 1;
+  margin-top: var(--status-bar-height);
+  z-index: 999;
 }
 .swiper-bg {
   width: 750rpx;
@@ -317,6 +337,12 @@ export default {
 ::v-deep .swiper-box {
   width: 750rpx;
   height: 680rpx;
+}
+
+.map {
+  width: 626rpx;
+  height: 192rpx;
+  border-radius: 10rpx 10rpx 10rpx 10rpx;
 }
 
 .swiper-image {

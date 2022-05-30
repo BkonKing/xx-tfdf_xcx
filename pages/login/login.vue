@@ -155,6 +155,7 @@ export default {
       }
     },
     goBack() {
+      console.log(2222);
       this.$router.go(-1);
     }
   }
@@ -173,7 +174,8 @@ export default {
 .uni-icon-left {
   position: fixed;
   left: 20rpx;
-  top: 60rpx;
+  top: 24rpx;
+  margin-top: var(--status-bar-height);
   z-index: 1000;
 }
 .bg {

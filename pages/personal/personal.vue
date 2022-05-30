@@ -13,7 +13,7 @@
     />
     <view class="login-box">
       <image class="avatar" src="@/static/avatar.png" mode="aspectFill"></image>
-      <view class="text-1">{{userInfo.realname}}</view>
+      <view class="text-1">{{userMobile}}</view>
       <button class="tf-btn" @click="outLogin">退出登录</button>
     </view>
     <view class="tf-row-justify-center">
@@ -28,7 +28,7 @@
   import { mapGetters } from 'vuex';
 export default {
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo', 'userMobile'])
   },
   data() {
     return {};
