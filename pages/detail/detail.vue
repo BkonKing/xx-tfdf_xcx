@@ -40,11 +40,7 @@
           <view class="text-2 tf-mt-10">参考均价</view>
         </view>
         <view class="tf-flex-col">
-          <view class="tf-text-strong">
-            {{ parseFloat(info.roomMinArea) }}-{{
-              parseFloat(info.roomMaxArea)
-            }}m²
-          </view>
+          <view class="tf-text-strong">{{ roomArea }}m²</view>
           <view class="text-2 tf-mt-10">
             {{ houseText ? `${houseText}室` : '房间面积' }}
           </view>
@@ -76,7 +72,12 @@
             :key="i"
             class="house-box"
           >
-            <image class="house-image" :src="house.images" @click="previewHouseImage(i)"></image>
+            <image
+              class="house-image"
+              mode="aspectFit"
+              :src="house.images"
+              @click="previewHouseImage(i)"
+            ></image>
             <view class="house-text-1">{{ house.houseName }}</view>
             <view class="tf-mt-10">
               <text class="tf-text-sm">
@@ -96,6 +97,7 @@
     <view class="card tf-mt-20">
       <view class="title">楼盘详情</view>
       <view class="tf-mt-30">
+        <!-- <u-parse :content="info.content"></u-parse> -->
         <rich-text :nodes="info.content"></rich-text>
       </view>
     </view>
@@ -124,11 +126,16 @@
 <script>
 import { getProjectInfo } from '@/api/user.js';
 import { convert2TecentMap, openLocation } from '@/utils/util';
+import uParse from '@/components/u-parse/u-parse.vue';
+import htmlParser from '@/utils/html-parser.js';
 
 export default {
+  components: {
+    uParse
+  },
   computed: {
     images() {
-      return this.info.images.map(obj => obj.url);
+      return this.info.images.map(obj => obj.url.replace('https', 'http'));
     },
     activeHouseData() {
       const index = this.activeIndex;
@@ -142,12 +149,21 @@ export default {
       return `${province}${city}${area}${address}`;
     },
     newLocation() {
-      const { latitude, longitude } = this.info
+      const { latitude, longitude } = this.info;
       const newLocation = convert2TecentMap({
         latitude: latitude,
         longitude: longitude
-      })
-      return newLocation
+      });
+      return newLocation;
+    },
+    roomArea() {
+      let { roomMinArea = 0, roomMaxArea = 0 } = this.info;
+      roomMinArea = parseFloat(roomMinArea);
+      roomMaxArea = parseFloat(roomMaxArea);
+      if (roomMinArea > 0 && roomMaxArea > 0) {
+        return `${roomMinArea} - ${roomMaxArea}`;
+      }
+      return roomMinArea || roomMaxArea;
     }
   },
   data() {
@@ -173,6 +189,21 @@ export default {
       const { records } = await getProjectInfo({
         id: this.id
       });
+      let content = records.content;
+      content = content.replace(
+        /\<strike/gi,
+        '\<span style="text-decoration: line-through;"'
+      );
+      content = content.replace(/strike\>/gi, 'span\>');
+      //  为字体附上颜色
+      content = content.replace(/\<font color=\"/gi, '\<font style="color: ');
+      content = content.replace(
+        /\<font size=\"([0-9]+)"/gi,
+        '\<font class="fontSize$1"'
+      );
+      // 删除空的style属性，避免因为和已有的style属性冲突导致不显示
+      content = content.replace(/style=""/gi, '');
+      records.content = htmlParser(content);
       this.info = records || {};
       if (records.house) {
         const houseText = [];
@@ -199,23 +230,22 @@ export default {
       });
     },
     previewImage(index) {
+      console.log(this.images);
       uni.previewImage({
         urls: this.images,
         current: index
       });
     },
     previewHouseImage(index) {
-      const images = this.activeHouseData.map((house) => {
-        return house.images
-      })
+      const images = this.activeHouseData.map(house => {
+        return house.images;
+      });
       uni.previewImage({
         urls: images,
         current: index
       });
     },
-    previewContentImage() {
-      
-    },
+    previewContentImage() {},
     openMap() {
       openLocation({
         name: this.info.projectName,
@@ -242,9 +272,10 @@ export default {
 }
 .left-btn {
   position: fixed;
-  top: 24rpx;
-  left: 34rpx;
+  top: 4rpx;
+  left: 14rpx;
   margin-top: var(--status-bar-height);
+  padding: 20rpx;
   z-index: 999;
 }
 .swiper-bg {

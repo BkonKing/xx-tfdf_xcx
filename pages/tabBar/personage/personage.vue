@@ -24,6 +24,8 @@
           <image class="border-image" src="@/static/border.png"></image>
         </view>
       </view>
+    </view>
+    <template v-if="userInfo.id">
       <view v-if="listData && listData.length" class="card-list">
         <view
           v-for="(item, index) in listData"
@@ -49,7 +51,7 @@
           <view class="text-4 tf-mt-30">
             {{ item.project }} {{ item.house ? `(${item.house})` : '' }}
           </view>
-          <view class="text-4 tf-mt-10">
+          <view class="text-4 tf-mt-10" style="word-break: break-all;">
             {{ item.realname ? `${item.realname}，` : '' }}{{ item.mobile
             }}{{ item.explain ? `，${item.explain}` : '' }}
           </view>
@@ -59,7 +61,7 @@
         <image class="empty-image" src="@/static/empty-1.png"></image>
         <view class="tf-mt-30">还没有预约~</view>
       </view>
-    </view>
+    </template>
   </view>
 </template>
 
@@ -143,6 +145,7 @@ export default {
 .bg {
   width: 1200rpx;
   height: 690rpx;
+  background-color: #fff;
   position: fixed;
   top: -340rpx;
   left: -200rpx;
@@ -174,14 +177,18 @@ export default {
   }
 }
 .user-info {
+  position: fixed;
+  // background-color: #f7f7f7;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 60rpx 0 30rpx;
   margin-top: 42rpx;
   .user-avatar {
-    width: 120rpx;
-    height: 120rpx;
+    width: 100rpx;
+    height: 100rpx;
+    padding: 10rpx;
     background: #f7f7f7;
     border-radius: 50%;
   }
@@ -212,10 +219,11 @@ export default {
   width: 690rpx;
   margin-left: 30rpx;
   margin-top: 52rpx;
+  padding-top: 200rpx;
 }
 .card {
   padding: 40rpx;
-  margin-top: 20rpx;
+  margin-bottom: 20rpx;
   background: #ffffff;
   box-shadow: 0rpx 0rpx 20rpx 1rpx rgba(0, 0, 0, 0.050980392156862744);
   border-radius: 20rpx 20rpx 20rpx 20rpx;

@@ -1,7 +1,6 @@
 <template>
   <view>
     <uni-nav-bar
-      title="首页"
       leftWidth="0"
       statusBar="true"
       backgroundColor="false"
@@ -22,7 +21,7 @@
             src="@/static/avatar.png"
             mode="aspectFill"
           ></image>
-          <view class="text">{{ userInfo.id ? userMobile : '登录/注册'}}</view>
+          <view class="text">{{ userInfo.id ? userMobile : '登录/注册' }}</view>
         </view>
       </view>
       <view class="container">
@@ -45,8 +44,8 @@
               <view class="text-1">{{ item.projectName }}</view>
               <view class="tf-mt-10 text-2">
                 {{ item.province }} {{ item.city }} {{ item.area }}/建面{{
-                  parseFloat(item.roomMinArea)
-                }}-{{ parseFloat(item.roomMaxArea) }}m²
+                  item.roomMinArea | roomArea(item.roomMaxArea)
+                }}m²
               </view>
               <view class="tf-mt-20">
                 <text class="text-3">{{ parseFloat(item.averagePrice) }}</text>
@@ -81,11 +80,21 @@ export default {
   computed: {
     ...mapGetters(['userInfo', 'userMobile'])
   },
+  filters: {
+    roomArea(roomMinArea = 0, roomMaxArea = 0) {
+      roomMinArea = parseFloat(roomMinArea);
+      roomMaxArea = parseFloat(roomMaxArea);
+      if (roomMinArea > 0 && roomMaxArea > 0) {
+        return `${roomMinArea} - ${roomMaxArea}`;
+      }
+      return roomMinArea || roomMaxArea;
+    }
+  },
   data() {
     return {
-      loginVisible:false,
+      loginVisible: false,
       infoShowPermissions: 0,
-      shareInfo: {},
+      shareInfo: {}
     };
   },
   onLoad() {
@@ -118,8 +127,8 @@ export default {
         pageSize: this.pageSize,
         utype: this.userInfo?.utype || 0
       }).then(res => {
-        this.infoShowPermissions = +res.infoShowPermissions
-        return res
+        this.infoShowPermissions = +res.infoShowPermissions;
+        return res;
       });
     },
     async getShareInfo() {
@@ -130,7 +139,11 @@ export default {
       if (!this.userInfo.id) {
         this.$router.push({
           path: '/pages/login/login'
-        })
+        });
+      } else {
+        this.$router.push({
+          path: '/pages/personal/personal'
+        });
       }
     },
     goDetail({ id }) {
@@ -174,9 +187,10 @@ export default {
   padding: 20rpx 60rpx 0;
 }
 .avatar {
-  width: 80rpx;
-  height: 80rpx;
-  background: #f7f7f7;
+  width: 70rpx;
+  height: 70rpx;
+  padding: 5rpx;
+  background: #fff;
   border-radius: 50%;
 }
 .text {
